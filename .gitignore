@@ -20,4 +20,4 @@ doc/api/
 *.js.deps
 *.js.map
 
-./graphql-project/server/node_modules
+graphql-project/server/node_modules
