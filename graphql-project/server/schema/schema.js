@@ -8,9 +8,12 @@ const {
 
 // Create types
 
-const users = [
-  { id:'1', name: 'Bill', age:20 },
-  { id:'2', name: 'Samantha', age:21 }
+const usersData = [
+  { id:'1', name: 'Bill', age: 20 },
+  { id:'2', name: 'Samantha', age: 21 },
+  { id:'3', name: 'Anton', age: 15 },
+  { id:'4', name: 'Dima', age: 37 },
+  { id:'5', name: 'Alice', age: 39 },
 ];
 
 const UserType = new GraphQLObjectType({
@@ -35,7 +38,8 @@ const RootQuery = new GraphQLObjectType({
         id: { type: GraphQLString },
       },
       resolve(parent, args) {
-        return users.find(f => f.id === args.id)
+        const { id } = args
+        return usersData.find(f => f.id === id)
       },
     }
   }
