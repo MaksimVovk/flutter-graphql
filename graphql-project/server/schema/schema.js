@@ -4,6 +4,7 @@ const {
   GraphQLString,
   GraphQLInt,
   GraphQLSchema,
+  GraphQLList,
 } = require('graphql')
 
 // Create types
@@ -17,11 +18,19 @@ const usersData = [
 ];
 
 const hobbiesData = [
-  { id:'1', title: 'Sports', description: 'Play any sport games like a football' },
-  { id:'2', title: 'Video Games', description: 'Play any computer game like a CS go' },
-  { id:'3', title: 'Programming', description: 'Use computer to make the world a better' },
-  { id:'4', title: 'Reading Books', description: 'Read any an interesting books' },
-  { id:'5', title: 'Tech Blog', description: 'Make an interesting blog about modern technologies' },
+  { id: '1', userId: '4', title: 'Sports', description: 'Play any sport games like a football' },
+  { id: '2', userId: '1', title: 'Video Games', description: 'Play any computer game like a CS go' },
+  { id: '3', userId: '1', title: 'Programming', description: 'Use computer to make the world a better' },
+  { id: '4', userId: '3', title: 'Reading Books', description: 'Read any an interesting books' },
+  { id: '5', userId: '2', title: 'Tech Blog', description: 'Make an interesting blog about modern technologies' },
+]
+
+const postsData = [
+  { id: '1', userId: '4', comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
+  { id: '2', userId: '1', comment: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
+  { id: '3', userId: '1', comment: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.' },
+  { id: '4', userId: '3', comment: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' },
+  { id: '5', userId: '2', comment: 'Lorem ipsum dolor sit amet.' },
 ]
 
 const UserType = new GraphQLObjectType({
@@ -32,6 +41,18 @@ const UserType = new GraphQLObjectType({
     name: { type: GraphQLString },
     age: { type: GraphQLInt },
     profession: { type: GraphQLString },
+    posts: {
+      type: new GraphQLList(PostType),
+      resolve (parent, args) {
+        return postsData.filter(f => f.userId === parent.id)
+      },
+    },
+    hobbies: {
+      type: new GraphQLList(HobbyType),
+      resolve (parent, args) {
+        return hobbiesData.filter(f => f.userId === parent.id)
+      },
+    }
   })
 })
 
@@ -42,6 +63,27 @@ const HobbyType = new GraphQLObjectType({
     id: { type: GraphQLID },
     title: { type: GraphQLString },
     description: { type: GraphQLString },
+    user: {
+      type: UserType,
+      resolve (parent, args) {
+        return usersData.find(f => f.id === parent.userId)
+      }
+    }
+  })
+})
+
+const PostType = new GraphQLObjectType({
+  name: 'Post',
+  description: 'Post description',
+  fields: () => ({
+    id: { type: GraphQLID },
+    comment: { type: GraphQLString },
+    user: {
+      type: UserType,
+      resolve (parent, args) {
+        return usersData.find(f => f.id === parent.userId)
+      }
+    }
   })
 })
 
@@ -69,6 +111,23 @@ const RootQuery = new GraphQLObjectType({
       resolve (parent, args) {
         const { id } = args
         return hobbiesData.find(f => f.id === id)
+      }
+    },
+    post: {
+      type: PostType,
+      args: {
+        id: { type: GraphQLID, require: false },
+        search: { type: GraphQLString, require: false },
+      },
+      resolve (parent, args) {
+        const id = args && args.id
+        const search = args && args.search
+
+        if (id) {
+          return postsData.find(f => f.id === id)
+        }
+
+        return postsData.find(f => f.comment.toLowerCase().includes(search.toLowerCase()))
       }
     }
   }
