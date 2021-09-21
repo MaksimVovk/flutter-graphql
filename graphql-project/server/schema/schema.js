@@ -7,9 +7,15 @@ const {
   GraphQLList,
 } = require('graphql')
 
-// Create types
+const {
+  User,
+  Post,
+  Hobby
+} = require('../model')
 
-const usersData = [
+
+// dummy data
+/* const usersData = [
   { id:'1', name: 'Bill', age: 20, profession: 'Developer' },
   { id:'2', name: 'Samantha', age: 21, profession: 'Teacher' },
   { id:'3', name: 'Anton', age: 15, profession: 'Student' },
@@ -32,7 +38,9 @@ const postsData = [
   { id: '4', userId: '3', comment: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' },
   { id: '5', userId: '2', comment: 'Lorem ipsum dolor sit amet.' },
 ]
+*/
 
+// Create types
 const UserType = new GraphQLObjectType({
   name: 'User',
   description: 'Documentation for user',
@@ -159,7 +167,7 @@ const RootQuery = new GraphQLObjectType({
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
-    createUser: {
+    CreateUser: {
       type: UserType,
       args: {
         // id: { type: GraphQLID },
@@ -168,13 +176,13 @@ const Mutation = new GraphQLObjectType({
         profession: { type: GraphQLString },
       },
       resolve (parent, args) {
-        let user = {
+        let user = User({
           name: args.name,
           age: args.age,
           profession: args.profession,
-        }
+        })
 
-        return user
+        return user.save()
       }
     },
     CreatePost: {
@@ -185,12 +193,12 @@ const Mutation = new GraphQLObjectType({
         userId: { type: GraphQLID },
       },
       resolve (parent, args) {
-        let post = {
+        let post = Post({
           comment: args.comment,
           userId: args.userId,
-        }
+        })
 
-        return post
+        return post.save()
       }
     },
     CreateHobby: {
