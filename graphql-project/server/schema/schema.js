@@ -5,6 +5,7 @@ const {
   GraphQLInt,
   GraphQLSchema,
   GraphQLList,
+  GraphQLNonNull,
 } = require('graphql')
 
 const {
@@ -167,8 +168,8 @@ const Mutation = new GraphQLObjectType({
       type: UserType,
       args: {
         // id: { type: GraphQLID },
-        name: { type: GraphQLString },
-        age: { type: GraphQLInt },
+        name: { type: GraphQLNonNull(GraphQLString) },
+        age: { type: GraphQLNonNull(GraphQLInt) },
         profession: { type: GraphQLString },
       },
       resolve (parent, args) {
@@ -185,8 +186,8 @@ const Mutation = new GraphQLObjectType({
       type: PostType,
       args: {
         // id: { type: GraphQLID },
-        comment: { type: GraphQLString },
-        userId: { type: GraphQLID },
+        comment: { type: GraphQLNonNull(GraphQLString) },
+        userId: { type: GraphQLNonNull(GraphQLID) },
       },
       resolve (parent, args) {
         let post = Post({
@@ -201,9 +202,9 @@ const Mutation = new GraphQLObjectType({
       type: HobbyType,
       args: {
         // id: { type: GraphQLID },
-        title: { type: GraphQLString },
-        description: { type: GraphQLString },
-        userId: { type: GraphQLID },
+        title: { type: GraphQLNonNull(GraphQLString) },
+        description: { type: GraphQLNonNull(GraphQLString) },
+        userId: { type: GraphQLNonNull(GraphQLID) },
       },
       resolve (parent, args) {
         let hobby = Hobby({
