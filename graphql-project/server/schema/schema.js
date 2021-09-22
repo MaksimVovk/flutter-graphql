@@ -52,13 +52,13 @@ const UserType = new GraphQLObjectType({
     posts: {
       type: new GraphQLList(PostType),
       resolve (parent, args) {
-        return postsData.filter(f => f.userId === parent.id)
+        return Post.find({ userId: parent.id })
       },
     },
     hobbies: {
       type: new GraphQLList(HobbyType),
       resolve (parent, args) {
-        return hobbiesData.filter(f => f.userId === parent.id)
+        return Hobby.find({ userId: parent.id })
       },
     }
   })
@@ -74,7 +74,7 @@ const HobbyType = new GraphQLObjectType({
     user: {
       type: UserType,
       resolve (parent, args) {
-        return usersData.find(f => f.id === parent.userId)
+        return User.findById(parent.userId)
       }
     }
   })
@@ -89,7 +89,7 @@ const PostType = new GraphQLObjectType({
     user: {
       type: UserType,
       resolve (parent, args) {
-        return usersData.find(f => f.id === parent.userId)
+        return User.findById(parent.userId)
       }
     }
   })
@@ -108,7 +108,7 @@ const RootQuery = new GraphQLObjectType({
       },
       resolve(parent, args) {
         const { id } = args
-        return usersData.find(f => f.id === id)
+        return User.findById(id)
       },
     },
     users : {
@@ -117,7 +117,7 @@ const RootQuery = new GraphQLObjectType({
         ids: { type: GraphQLList(GraphQLID)}
       },
       resolve (parent, args) {
-        return usersData.filter(f => args.ids.includes(f.id))
+        return User.find({})
       }
     },
     hobby: {
@@ -127,13 +127,13 @@ const RootQuery = new GraphQLObjectType({
       },
       resolve (parent, args) {
         const { id } = args
-        return hobbiesData.find(f => f.id === id)
+        return Hobby.findById(id)
       }
     },
     hobbies: {
       type: new GraphQLList(HobbyType),
       resolve (parent, args) {
-        return hobbiesData
+        return Hobby.find({})
       }
     },
     post: {
@@ -146,17 +146,13 @@ const RootQuery = new GraphQLObjectType({
         const id = args && args.id
         const search = args && args.search
 
-        if (id) {
-          return postsData.find(f => f.id === id)
-        }
-
-        return postsData.find(f => f.comment.toLowerCase().includes(search.toLowerCase()))
+        return Post.findById(id)
       }
     },
     posts: {
       type: new GraphQLList(PostType),
       resolve (parent, args) {
-        return postsData
+        return Post.find({})
       }
     },
   }
