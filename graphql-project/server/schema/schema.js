@@ -225,7 +225,6 @@ const Mutation = new GraphQLObjectType({
       args: {
         id: { type: GraphQLNonNull(GraphQLID) },
         comment: { type: GraphQLNonNull(GraphQLString) },
-        userId: { type: GraphQLNonNull(GraphQLID) },
       },
       resolve (parent, args) {
         return Post.findOneAndUpdate(
@@ -233,7 +232,6 @@ const Mutation = new GraphQLObjectType({
           {
             $set: {
               comment: args.comment,
-              userId: args.userId,
             },
           },
           { new: true },
@@ -256,6 +254,25 @@ const Mutation = new GraphQLObjectType({
         })
 
         return hobby.save()
+      }
+    },
+    UpdateHobby: {
+      type: HobbyType,
+      args: {
+        id: { type: GraphQLNonNull(GraphQLID) },
+        title: { type: GraphQLNonNull(GraphQLString) },
+        description: { type: GraphQLNonNull(GraphQLString) },
+      },
+      resolve (parent, args) {
+        return Hobby.findOneAndUpdate(
+          args.id,
+          {
+            $set: {
+              title: args.title,
+              description: args.description,
+            }
+          }, { new: true }
+        )
       }
     }
   }
