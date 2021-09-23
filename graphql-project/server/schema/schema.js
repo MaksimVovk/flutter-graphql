@@ -173,7 +173,7 @@ const Mutation = new GraphQLObjectType({
         profession: { type: GraphQLString },
       },
       resolve (parent, args) {
-        let user = User({
+        const user = User({
           name: args.name,
           age: args.age,
           profession: args.profession,
@@ -204,6 +204,21 @@ const Mutation = new GraphQLObjectType({
         ))
       }
     },
+    RemoveUser: {
+      type: UserType,
+      args: {
+        id: { type: GraphQLNonNull(GraphQLString) },
+      },
+      resolve (parent, args) {
+        const removedUser = User.findByIdAndRemove(args.id).exec()
+
+        if (!removedUser) {
+          throw new Error()
+        }
+
+        return removedUser
+      }
+    },
     CreatePost: {
       type: PostType,
       args: {
@@ -212,7 +227,7 @@ const Mutation = new GraphQLObjectType({
         userId: { type: GraphQLNonNull(GraphQLID) },
       },
       resolve (parent, args) {
-        let post = Post({
+        const post = Post({
           comment: args.comment,
           userId: args.userId,
         })
@@ -247,7 +262,7 @@ const Mutation = new GraphQLObjectType({
         userId: { type: GraphQLNonNull(GraphQLID) },
       },
       resolve (parent, args) {
-        let hobby = Hobby({
+        const hobby = Hobby({
           title: args.title,
           description: args.description,
           userId: args.userId,
