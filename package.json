@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node ./server/app.js",
+    "start": "nodemon ./server/app.js",
     "dev": "nodemon ./server/app.js"
   },
   "author": "",
@@ -15,9 +15,7 @@
     "express-graphql": "^0.12.0",
     "graphql": "^15.5.3",
     "lodash": "^4.17.21",
-    "mongoose": "^6.0.7"
-  },
-  "devDependencies": {
+    "mongoose": "^6.0.7",
     "nodemon": "^2.0.12"
   }
 }
