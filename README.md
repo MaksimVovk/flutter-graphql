@@ -1,1 +1,1 @@
-# flutter-graphql
+# Simple flutter and node js application
