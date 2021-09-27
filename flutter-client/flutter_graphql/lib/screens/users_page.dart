@@ -74,7 +74,15 @@ class _UsersPageState extends State<UsersPage> {
                                   ),
                                 ),
                               ],
-                            )
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8, left: 8),
+                              child: Text('Occupation: ${user['profession'] ?? '-' }')
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8, left: 8),
+                              child: Text('Age: ${user['age'] ?? '-' }')
+                            ),
                           ],
                         ),
                       ),
