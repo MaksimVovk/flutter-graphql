@@ -73,6 +73,35 @@ class _UsersPageState extends State<UsersPage> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
+                                Row(
+                                  children: [
+                                    InkWell(
+                                      child: Container(
+                                        child: Icon(
+                                          Icons.edit,
+                                          color: Colors.greenAccent,
+                                        ),
+                                      ),
+                                      onTap: () async {
+                                        print('edit');
+                                      },
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 10),
+                                      child: InkWell(
+                                        child: Container(
+                                          child: Icon(
+                                            Icons.delete_forever,
+                                            color: Colors.redAccent,
+                                          ),
+                                        ),
+                                        onTap: () async {
+                                          print('edit');
+                                        },
+                                      ),
+                                    )
+                                  ],
+                                )
                               ],
                             ),
                             Padding(
