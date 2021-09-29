@@ -18,9 +18,9 @@ class _AddUserPageState extends State<AddUserPage> {
 
   bool _isSaving = false;
   bool _isHobbySaving = false;
-  bool _visable = false;
+  bool _visible = false;
 
-  String _currentUserId;
+  String currentUserId;
 
   String insertUser () {
     return '''
@@ -39,7 +39,25 @@ class _AddUserPageState extends State<AddUserPage> {
   }
 
   String insertHobby () {
-    return '';
+    return '''
+      mutation
+        CreateHobby (
+          \$title: String!,
+          \$description: String!,
+          \$userId: String!
+        ) {
+          CreateHobby (title: \$title, description: \$description, userId: \$userId) {
+            id
+            title
+          }
+        }
+    ''';
+  }
+
+  void _toggle() {
+    setState(() {
+      _visible = !_visible;
+    });
   }
 
   @override
@@ -81,7 +99,11 @@ class _AddUserPageState extends State<AddUserPage> {
                   onCompleted: (data) {
                     setState(() {
                       _isSaving = false;
-                      _currentUserId = data['CreateUser']['id'];
+                      currentUserId = data['CreateUser']['id'];
+                      print(currentUserId);
+                      if (currentUserId.isNotEmpty) {
+                        _toggle();
+                      }
                     });
                   },
                 ),
@@ -191,12 +213,13 @@ class _AddUserPageState extends State<AddUserPage> {
               ),
               // Add Hobby
               Visibility(
-                visible: _visable,
+                visible: _visible,
                 child: Mutation(
                   options: MutationOptions(
                     document: gql(insertHobby()),
                     fetchPolicy: FetchPolicy.noCache,
                     onCompleted: (data) {
+                      print(data.toString());
                       setState(() {
                         _isHobbySaving = false;
                       });
@@ -261,9 +284,9 @@ class _AddUserPageState extends State<AddUserPage> {
                                     _isHobbySaving = true;
                                   });
                                   runMutation({
-                                    'title': _hobbyTitleController.text.trim(),
-                                    'description': _descriptionController.text.trim(),
-                                    'userId': _currentUserId,
+                                    'title': _hobbyTitleController.text,
+                                    'description': _descriptionController.text,
+                                    'userId': currentUserId,
                                   });
                                 }
                               },
