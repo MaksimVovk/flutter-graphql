@@ -11,6 +11,7 @@ class _AddUserPageState extends State<AddUserPage> {
   final _nameController = TextEditingController();
   final _ageController = TextEditingController();
   final _professionController = TextEditingController();
+  bool _isSaving = false;
 
   String insertUser () {
     return '''
@@ -65,7 +66,9 @@ class _AddUserPageState extends State<AddUserPage> {
                   document: gql(insertUser()),
                   fetchPolicy: FetchPolicy.noCache,
                   onCompleted: (data) {
-                    print(data.toString());
+                    setState(() {
+                      _isSaving = false;
+                    });
                   },
                 ),
                 builder: (runMutation, result) {
@@ -131,31 +134,42 @@ class _AddUserPageState extends State<AddUserPage> {
                           keyboardType: TextInputType.text,
                         ),
                         SizedBox(height: 12,),
-                        TextButton(
-                          onPressed: () {
-                            if (_formKey.currentState.validate()) {
-                              runMutation({
-                                'name': _nameController.text.trim(),
-                                'profession': _professionController.text.trim(),
-                                'age': int.parse(_ageController.text.trim()),
-                              });
-                            }
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 12),
-                            child: Text(
-                              'Save',
-                              style: TextStyle(
-                                color: Colors.blueGrey
-                              ),
-                            )
+                        _isSaving
+                          ? SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 3,
+                            ),
+                          )
+                          : TextButton(
+                            onPressed: () {
+                              if (_formKey.currentState.validate()) {
+                                setState(() {
+                                  _isSaving = true;
+                                });
+                                runMutation({
+                                  'name': _nameController.text.trim(),
+                                  'profession': _professionController.text.trim(),
+                                  'age': int.parse(_ageController.text.trim()),
+                                });
+                              }
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 12),
+                              child: Text(
+                                'Save',
+                                style: TextStyle(
+                                  color: Colors.blueGrey
+                                ),
+                              )
+                            ),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                Colors.greenAccent,
+                              )
+                            ),
                           ),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                              Colors.greenAccent,
-                            )
-                          ),
-                        ),
                       ],
                     ),
                   );
