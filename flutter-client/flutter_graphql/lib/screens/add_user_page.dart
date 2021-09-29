@@ -11,7 +11,16 @@ class _AddUserPageState extends State<AddUserPage> {
   final _nameController = TextEditingController();
   final _ageController = TextEditingController();
   final _professionController = TextEditingController();
+
+  final _formHobbyKey = GlobalKey<FormState>();
+  final _hobbyTitleController = TextEditingController();
+  final _descriptionController = TextEditingController();
+
   bool _isSaving = false;
+  bool _isHobbySaving = false;
+  bool _visable = false;
+
+  String _currentUserId;
 
   String insertUser () {
     return '''
@@ -27,6 +36,10 @@ class _AddUserPageState extends State<AddUserPage> {
           }
         }
     ''';
+  }
+
+  String insertHobby () {
+    return '';
   }
 
   @override
@@ -68,6 +81,7 @@ class _AddUserPageState extends State<AddUserPage> {
                   onCompleted: (data) {
                     setState(() {
                       _isSaving = false;
+                      _currentUserId = data['CreateUser']['id'];
                     });
                   },
                 ),
@@ -174,6 +188,105 @@ class _AddUserPageState extends State<AddUserPage> {
                     ),
                   );
                 },
+              ),
+              // Add Hobby
+              Visibility(
+                visible: _visable,
+                child: Mutation(
+                  options: MutationOptions(
+                    document: gql(insertHobby()),
+                    fetchPolicy: FetchPolicy.noCache,
+                    onCompleted: (data) {
+                      setState(() {
+                        _isHobbySaving = false;
+                      });
+                    },
+                  ),
+                  builder: (runMutation, result) {
+                    return Form(
+                      key: _formHobbyKey,
+                      child: Column(
+                        children: [
+                          SizedBox(height: 12,),
+                          TextFormField(
+                            controller: _hobbyTitleController,
+                            decoration: InputDecoration(
+                              labelText: 'Hobby Title',
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide()
+                              )
+                            ),
+                            validator: (v) {
+                              if (v.length == 0) {
+                                return 'Title can\'t be empty';
+                              } else {
+                                return null;
+                              }
+                            },
+                            keyboardType: TextInputType.text,
+                          ),
+                          SizedBox(height: 12,),
+                          TextFormField(
+                            controller: _descriptionController,
+                            decoration: InputDecoration(
+                              labelText: 'Hobby Description',
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide()
+                              )
+                            ),
+                            validator: (v) {
+                              if (v.length == 0) {
+                                return 'Description can\'t be empty';
+                              } else {
+                                return null;
+                              }
+                            },
+                            keyboardType: TextInputType.text,
+                          ),
+                          SizedBox(height: 12,),
+                          _isHobbySaving
+                            ? SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 3,
+                              ),
+                            )
+                            : TextButton(
+                              onPressed: () {
+                                if (_formHobbyKey.currentState.validate()) {
+                                  setState(() {
+                                    _isHobbySaving = true;
+                                  });
+                                  runMutation({
+                                    'title': _hobbyTitleController.text.trim(),
+                                    'description': _descriptionController.text.trim(),
+                                    'userId': _currentUserId,
+                                  });
+                                }
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 12),
+                                child: Text(
+                                  'Save',
+                                  style: TextStyle(
+                                    color: Colors.blueGrey
+                                  ),
+                                )
+                              ),
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                  Colors.greenAccent,
+                                )
+                              ),
+                            ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               )
             ],
           ),
