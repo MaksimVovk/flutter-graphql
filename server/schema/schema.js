@@ -173,6 +173,7 @@ const Mutation = new GraphQLObjectType({
         profession: { type: GraphQLString },
       },
       resolve (parent, args) {
+        console.log(args)
         const user = User({
           name: args.name,
           age: args.age,
@@ -268,9 +269,10 @@ const Mutation = new GraphQLObjectType({
         // id: { type: GraphQLID },
         title: { type: GraphQLNonNull(GraphQLString) },
         description: { type: GraphQLNonNull(GraphQLString) },
-        userId: { type: GraphQLNonNull(GraphQLID) },
+        userId: { type: GraphQLNonNull(GraphQLString) },
       },
       resolve (parent, args) {
+        console.log(args)
         const hobby = Hobby({
           title: args.title,
           description: args.description,
