@@ -10,10 +10,22 @@ class _AddUserPageState extends State<AddUserPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _ageController = TextEditingController();
-  final _proffesionController = TextEditingController();
+  final _professionController = TextEditingController();
 
   String insertUser () {
-    return '';
+    return '''
+      mutation
+        CreateUser (
+          \$name: String!,
+          \$age: Int!,
+          \$profession: String!
+        ) {
+          CreateUser (name: \$name, age: \$age, profession: \$profession) {
+            id
+            name
+          }
+        }
+    ''';
   }
 
   @override
@@ -53,7 +65,7 @@ class _AddUserPageState extends State<AddUserPage> {
                   document: gql(insertUser()),
                   fetchPolicy: FetchPolicy.noCache,
                   onCompleted: (data) {
-                    
+                    print(data.toString());
                   },
                 ),
                 builder: (runMutation, result) {
@@ -101,9 +113,9 @@ class _AddUserPageState extends State<AddUserPage> {
                         ),
                         SizedBox(height: 12,),
                         TextFormField(
-                          controller: _proffesionController,
+                          controller: _professionController,
                           decoration: InputDecoration(
-                            labelText: 'Proffesion',
+                            labelText: 'Profession',
                             fillColor: Colors.white,
                             border: OutlineInputBorder(
                               borderSide: BorderSide()
@@ -111,7 +123,7 @@ class _AddUserPageState extends State<AddUserPage> {
                           ),
                           validator: (v) {
                             if (v.length == 0) {
-                              return 'Proffesion can\'t be empty';
+                              return 'Profession can\'t be empty';
                             } else {
                               return null;
                             }
@@ -121,7 +133,13 @@ class _AddUserPageState extends State<AddUserPage> {
                         SizedBox(height: 12,),
                         TextButton(
                           onPressed: () {
-
+                            if (_formKey.currentState.validate()) {
+                              runMutation({
+                                'name': _nameController.text.trim(),
+                                'profession': _professionController.text.trim(),
+                                'age': int.parse(_ageController.text.trim()),
+                              });
+                            }
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 12),
