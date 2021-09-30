@@ -225,7 +225,7 @@ const Mutation = new GraphQLObjectType({
       args: {
         // id: { type: GraphQLID },
         comment: { type: GraphQLNonNull(GraphQLString) },
-        userId: { type: GraphQLNonNull(GraphQLID) },
+        userId: { type: GraphQLNonNull(GraphQLString) },
       },
       resolve (parent, args) {
         const post = Post({
@@ -239,7 +239,7 @@ const Mutation = new GraphQLObjectType({
     UpdatePost: {
       type: PostType,
       args: {
-        id: { type: GraphQLNonNull(GraphQLID) },
+        id: { type: GraphQLNonNull(GraphQLString) },
         comment: { type: GraphQLNonNull(GraphQLString) },
       },
       resolve (parent, args) {
@@ -257,7 +257,7 @@ const Mutation = new GraphQLObjectType({
     RemovePost: {
       type: PostType,
       args: {
-        id: { type: GraphQLNonNull(GraphQLID) },
+        id: { type: GraphQLNonNull(GraphQLString) },
       },
       resolve (parent, args) {
         return Post.findByIdAndRemove(args.id).catch(e => {throw new Error()})
@@ -285,7 +285,7 @@ const Mutation = new GraphQLObjectType({
     UpdateHobby: {
       type: HobbyType,
       args: {
-        id: { type: GraphQLNonNull(GraphQLID) },
+        id: { type: GraphQLNonNull(GraphQLString) },
         title: { type: GraphQLNonNull(GraphQLString) },
         description: { type: GraphQLNonNull(GraphQLString) },
       },
@@ -304,7 +304,7 @@ const Mutation = new GraphQLObjectType({
     RemoveHobby: {
       type: HobbyType,
       args: {
-        id: { type: GraphQLNonNull(GraphQLID) },
+        id: { type: GraphQLNonNull(GraphQLString) },
       },
       resolve (parent, args) {
         return Hobby.findByIdAndRemove(args.id).catch(e => { throw new Error })
