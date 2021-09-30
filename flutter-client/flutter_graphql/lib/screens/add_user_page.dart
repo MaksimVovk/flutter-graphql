@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_graphql/screens/home_screen.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class AddUserPage extends StatefulWidget {
@@ -413,9 +414,40 @@ class _AddUserPageState extends State<AddUserPage> {
                         );
                       },
                     ),
+                    Padding(
+                      padding: const EdgeInsets.all(18),
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return HomeScreen();
+                              },
+                            ),
+                            (route) => false
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 12),
+                          child: Text(
+                            'Done',
+                            style: TextStyle(
+                              color: Colors.blueGrey,
+                              fontSize: 16,
+                            ),
+                          )
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            Colors.greenAccent
+                          )
+                        ),
+                      ),
+                    ),
                   ]
                 ),
-              )
+              ),
             ],
           ),
         ),
