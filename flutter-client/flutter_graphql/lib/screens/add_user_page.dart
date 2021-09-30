@@ -207,6 +207,9 @@ class _AddUserPageState extends State<AddUserPage> {
                                   'profession': _professionController.text.trim(),
                                   'age': int.parse(_ageController.text.trim()),
                                 });
+                                _nameController.clear();
+                                _professionController.clear();
+                                _ageController.clear();
                               }
                             },
                             child: Padding(
@@ -308,6 +311,9 @@ class _AddUserPageState extends State<AddUserPage> {
                                         'description': _descriptionController.text,
                                         'userId': currentUserId,
                                       });
+
+                                      _hobbyTitleController.clear();
+                                      _descriptionController.clear();
                                     }
                                   },
                                   child: Padding(
@@ -384,6 +390,7 @@ class _AddUserPageState extends State<AddUserPage> {
                                         'comment': _postCommentController.text,
                                         'userId': currentUserId,
                                       });
+                                      _postCommentController.clear();
                                     }
                                   },
                                   child: Padding(
