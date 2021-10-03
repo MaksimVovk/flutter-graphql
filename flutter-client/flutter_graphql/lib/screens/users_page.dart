@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_graphql/screens/udpate_user.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class UsersPage extends StatefulWidget {
@@ -83,7 +84,17 @@ class _UsersPageState extends State<UsersPage> {
                                         ),
                                       ),
                                       onTap: () async {
-                                        print('edit');
+                                        final route = MaterialPageRoute(
+                                          builder: (context) {
+                                            return UpdateUser(
+                                              id: user['id'],
+                                              name: user['name'],
+                                              age: user['age'],
+                                              profession: user['profession'],
+                                            );
+                                          },
+                                        );
+                                        await Navigator.push(context, route);
                                       },
                                     ),
                                     Padding(
