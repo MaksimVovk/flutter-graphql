@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_graphql/screens/home_screen.dart';
 import 'package:flutter_graphql/screens/udpate_user.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -10,6 +11,8 @@ class UsersPage extends StatefulWidget {
 
 class _UsersPageState extends State<UsersPage> {
   List users = [];
+  bool _isLoading = false;
+
   String _query = """
     query {
       users {
@@ -20,6 +23,18 @@ class _UsersPageState extends State<UsersPage> {
       }
     }
   """;
+
+  String removeUser () {
+    return '''
+      mutation RemoveUser (
+        \$id: String!
+      ) {
+        RemoveUser (id: \$id) {
+          name
+        }
+      }
+    ''';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,15 +114,41 @@ class _UsersPageState extends State<UsersPage> {
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 10),
-                                      child: InkWell(
-                                        child: Container(
-                                          child: Icon(
-                                            Icons.delete_forever,
-                                            color: Colors.redAccent,
-                                          ),
+                                      child: Mutation(
+                                        options: MutationOptions(
+                                          document: gql(removeUser()),
+                                          onCompleted: (data) {
+                                            setState(() {
+                                              _isLoading = false;
+                                            });
+                                          },
                                         ),
-                                        onTap: () async {
-                                          print('edit');
+                                        builder: (runMutation, result) {
+                                          return InkWell(
+                                            child: Container(
+                                              child: Icon(
+                                                Icons.delete_forever,
+                                                color: Colors.redAccent,
+                                              ),
+                                            ),
+                                            onTap: () async {
+                                              setState(() {
+                                                _isLoading = true;
+                                              });
+                                              runMutation({
+                                                'id': user['id'],
+                                              });
+                                              Navigator.pushAndRemoveUntil(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) {
+                                                    return HomeScreen();
+                                                  },
+                                                ),
+                                                (route) => false
+                                              );
+                                            },
+                                          );
                                         },
                                       ),
                                     )
