@@ -52,7 +52,11 @@ class _UsersPageState extends State<UsersPage> {
 
   String removeHoddies () {
     return '''
+      mutation RemoveHobbies (\$ids: [String]) {
+        RemoveHobbies (ids: \$ids) {
 
+        }
+      }
     ''';
   }
 
