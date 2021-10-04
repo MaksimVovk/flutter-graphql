@@ -54,7 +54,7 @@ class _UsersPageState extends State<UsersPage> {
     return '''
       mutation RemoveHobbies (\$ids: [String]) {
         RemoveHobbies (ids: \$ids) {
-
+          id
         }
       }
     ''';
@@ -159,10 +159,15 @@ class _UsersPageState extends State<UsersPage> {
                                               hobbyDeleteIds.clear();
                                               postDeleteIds.clear();
 
+                                              for (var i = 0; i < user["hobbies"].length; i++) {
+                                                hobbyDeleteIds.add(user["hobbies"][i]["id"]);
+                                              }
+
+                                              for (var i = 0; i < user["posts"].length; i++) {
+                                                postDeleteIds.add(user["posts"][i]["id"]);
+                                              }
+
                                               setState(() {
-                                                hobbyDeleteIds = user['hobbies'].map((item) => item['id']).toList() ?? [];
-                                                postDeleteIds = user['posts'].map((item) => item['id']).toList() ?? [];
-                                                _isLoading = true;
                                                 _isRemoveHobbies = true;
                                                 _isRemovePosts = true;
                                               });
@@ -191,14 +196,18 @@ class _UsersPageState extends State<UsersPage> {
                                         options: MutationOptions(
                                           document: gql(removeHoddies()),
                                           onCompleted: (data) {
-                                            return ;
+                                            print(data);
                                           },
                                         ),
                                         builder: (runMutation, result) {
                                           if (hobbyDeleteIds.isNotEmpty) {
-                                            runMutation({
-                                              'ids': hobbyDeleteIds,
-                                            });
+                                            try {
+                                              runMutation({
+                                                'ids': hobbyDeleteIds,
+                                              });
+                                            } catch (e) {
+                                              print(e);
+                                            }
                                           }
                                           return Container();
                                         },
