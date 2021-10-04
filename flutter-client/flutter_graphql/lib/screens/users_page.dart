@@ -200,6 +200,7 @@ class _UsersPageState extends State<UsersPage> {
                                           },
                                         ),
                                         builder: (runMutation, result) {
+                                          print(hobbyDeleteIds);
                                           if (hobbyDeleteIds.isNotEmpty) {
                                             try {
                                               runMutation({
