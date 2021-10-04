@@ -265,6 +265,28 @@ const Mutation = new GraphQLObjectType({
         return Post.findByIdAndRemove(args.id).catch(e => {throw new Error()})
       }
     },
+    RemovePosts: {
+      type: PostType,
+      args: {
+        ids: { type: GraphQLList(GraphQLString) },
+      },
+      resolve (parent, args) {
+        try {
+          let removedPosts = Post.deleteMany({
+            _id: args.ids
+          }).exec()
+
+          if (!removedPosts) {
+            throw new "Error"()
+          }
+
+          return removedPosts
+
+        } catch (e) {
+          console.log(e)
+        }
+      }
+    },
     CreateHobby: {
       type: HobbyType,
       args: {
@@ -326,14 +348,14 @@ const Mutation = new GraphQLObjectType({
           if (!removedHobbies) {
             throw new "Error"()
           }
-  
+
           return removedHobbies
 
         } catch (e) {
           console.log(e)
         }
       }
-    }
+    },
   }
 })
 
