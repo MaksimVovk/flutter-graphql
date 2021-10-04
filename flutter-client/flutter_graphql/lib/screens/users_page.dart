@@ -60,6 +60,16 @@ class _UsersPageState extends State<UsersPage> {
     ''';
   }
 
+  String removePosts () {
+    return '''
+    mutation RemovePosts (\$ids: [String]) {
+      RemovePosts (ids: \$ids) {
+        id
+      }
+    }
+    ''';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Query(
@@ -140,9 +150,6 @@ class _UsersPageState extends State<UsersPage> {
                                       options: MutationOptions(
                                         document: gql(removeUser()),
                                         onCompleted: (data) {
-                                          setState(() {
-                                            _isLoading = false;
-                                          });
                                         },
                                       ),
                                       builder: (runMutation, result) {
@@ -167,10 +174,12 @@ class _UsersPageState extends State<UsersPage> {
                                                 postDeleteIds.add(user["posts"][i]["id"]);
                                               }
 
-                                              setState(() {
-                                                _isRemoveHobbies = true;
-                                                _isRemovePosts = true;
-                                              });
+                                              if (this.mounted) {
+                                                setState(() {
+                                                  _isRemoveHobbies = true;
+                                                  _isRemovePosts = true;
+                                                });
+                                              }
 
                                               // print('Hobby ${hobbyDeleteIds.toString()}');
                                               // print('Post ${postDeleteIds.toString()}');
@@ -200,20 +209,42 @@ class _UsersPageState extends State<UsersPage> {
                                           },
                                         ),
                                         builder: (runMutation, result) {
-                                          print(hobbyDeleteIds);
                                           if (hobbyDeleteIds.isNotEmpty) {
                                             try {
                                               runMutation({
                                                 'ids': hobbyDeleteIds,
                                               });
                                             } catch (e) {
-                                              print(e);
+                                              print('Delete hobbies error: ${e}');
                                             }
                                           }
                                           return Container();
                                         },
                                       )
-                                      : Container()
+                                      : Container(),
+                                    _isRemovePosts
+                                      ? Mutation(
+                                          options: MutationOptions(
+                                            document: gql(removePosts()),
+                                            onCompleted: (data) {
+
+                                            },
+                                          ),
+                                          builder: (runMutation, result) {
+                                            if (postDeleteIds.isNotEmpty) {
+                                              try {
+                                                runMutation({
+                                                  'ids': postDeleteIds,
+                                                });
+                                              } catch (e) {
+                                                print('Delete posts error: ${e}');
+                                              }
+                                            }
+
+                                            return Container();
+                                          },
+                                        )
+                                      : Container(),
                                   ],
                                 )
                               ],
