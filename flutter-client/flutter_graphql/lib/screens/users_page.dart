@@ -20,6 +20,16 @@ class _UsersPageState extends State<UsersPage> {
         name
         age
         profession
+        posts {
+          id
+          comment
+          userId
+        }
+        hobbies {
+          id
+          title
+          userId
+        }
       }
     }
   """;
@@ -132,12 +142,13 @@ class _UsersPageState extends State<UsersPage> {
                                               ),
                                             ),
                                             onTap: () async {
+                                              print('User ${user.toString()}');
                                               setState(() {
                                                 _isLoading = true;
                                               });
-                                              runMutation({
-                                                'id': user['id'],
-                                              });
+                                              // runMutation({
+                                              //   'id': user['id'],
+                                              // });
                                               Navigator.pushAndRemoveUntil(
                                                 context,
                                                 MaterialPageRoute(
