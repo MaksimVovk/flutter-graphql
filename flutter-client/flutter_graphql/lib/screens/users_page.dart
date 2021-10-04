@@ -12,6 +12,8 @@ class UsersPage extends StatefulWidget {
 class _UsersPageState extends State<UsersPage> {
   List users = [];
   bool _isLoading = false;
+  bool _isRemoveHobbies = false;
+  bool _isRemovePosts = false;
   List hobbyDeleteIds = [];
   List postDeleteIds = [];
 
@@ -45,6 +47,12 @@ class _UsersPageState extends State<UsersPage> {
           name
         }
       }
+    ''';
+  }
+
+  String removeHoddies () {
+    return '''
+
     ''';
   }
 
@@ -124,19 +132,19 @@ class _UsersPageState extends State<UsersPage> {
                                         await Navigator.push(context, route);
                                       },
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 10),
-                                      child: Mutation(
-                                        options: MutationOptions(
-                                          document: gql(removeUser()),
-                                          onCompleted: (data) {
-                                            setState(() {
-                                              _isLoading = false;
-                                            });
-                                          },
-                                        ),
-                                        builder: (runMutation, result) {
-                                          return InkWell(
+                                    Mutation(
+                                      options: MutationOptions(
+                                        document: gql(removeUser()),
+                                        onCompleted: (data) {
+                                          setState(() {
+                                            _isLoading = false;
+                                          });
+                                        },
+                                      ),
+                                      builder: (runMutation, result) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8),
+                                          child: InkWell(
                                             child: Container(
                                               child: Icon(
                                                 Icons.delete_forever,
@@ -151,13 +159,15 @@ class _UsersPageState extends State<UsersPage> {
                                                 hobbyDeleteIds = user['hobbies'].map((item) => item['id']).toList() ?? [];
                                                 postDeleteIds = user['posts'].map((item) => item['id']).toList() ?? [];
                                                 _isLoading = true;
+                                                _isRemoveHobbies = true;
+                                                _isRemovePosts = true;
                                               });
 
-                                              print('Hobby ${hobbyDeleteIds.toString()}');
-                                              print('Post ${postDeleteIds.toString()}');
-                                              // runMutation({
-                                              //   'id': user['id'],
-                                              // });
+                                              // print('Hobby ${hobbyDeleteIds.toString()}');
+                                              // print('Post ${postDeleteIds.toString()}');
+                                              runMutation({
+                                                'id': user['id'],
+                                              });
                                               Navigator.pushAndRemoveUntil(
                                                 context,
                                                 MaterialPageRoute(
@@ -168,10 +178,28 @@ class _UsersPageState extends State<UsersPage> {
                                                 (route) => false
                                               );
                                             },
-                                          );
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    _isRemoveHobbies
+                                      ? Mutation(
+                                        options: MutationOptions(
+                                          document: gql(removeHoddies()),
+                                          onCompleted: (data) {
+                                            return ;
+                                          },
+                                        ),
+                                        builder: (runMutation, result) {
+                                          if (hobbyDeleteIds.isNotEmpty) {
+                                            runMutation({
+                                              'ids': hobbyDeleteIds,
+                                            });
+                                          }
+                                          return Container();
                                         },
-                                      ),
-                                    )
+                                      )
+                                      : Container()
                                   ],
                                 )
                               ],
