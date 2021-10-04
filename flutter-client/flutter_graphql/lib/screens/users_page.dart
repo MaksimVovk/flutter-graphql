@@ -12,6 +12,8 @@ class UsersPage extends StatefulWidget {
 class _UsersPageState extends State<UsersPage> {
   List users = [];
   bool _isLoading = false;
+  List hobbyDeleteIds = [];
+  List postDeleteIds = [];
 
   String _query = """
     query {
@@ -142,10 +144,17 @@ class _UsersPageState extends State<UsersPage> {
                                               ),
                                             ),
                                             onTap: () async {
-                                              print('User ${user.toString()}');
+                                              hobbyDeleteIds.clear();
+                                              postDeleteIds.clear();
+
                                               setState(() {
+                                                hobbyDeleteIds = user['hobbies'].map((item) => item['id']).toList() ?? [];
+                                                postDeleteIds = user['posts'].map((item) => item['id']).toList() ?? [];
                                                 _isLoading = true;
                                               });
+
+                                              print('Hobby ${hobbyDeleteIds.toString()}');
+                                              print('Post ${postDeleteIds.toString()}');
                                               // runMutation({
                                               //   'id': user['id'],
                                               // });
