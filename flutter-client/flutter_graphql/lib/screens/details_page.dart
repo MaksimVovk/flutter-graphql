@@ -183,13 +183,23 @@ class _DetailsPageState extends State<DetailsPage> {
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text('title: ${data['title']}'),
-                                      Text('description: ${data['description']}')
+                                      Text('Title: ${data['title']}'),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 8, left: 10),
+                                        child: Text('Description: ${data['description']}')
+                                      )
                                     ]
                                   )
                                 else
-                                  Text('${data['comment']}')
+                                  Text('${data['comment']}'),
                               ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Text(
+                                'Author: ${widget.user['name'].toString()}',
+                                style: TextStyle(fontStyle: FontStyle.italic),
+                              ),
                             )
                           ],
                         ),
