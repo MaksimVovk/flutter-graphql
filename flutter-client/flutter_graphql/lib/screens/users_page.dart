@@ -33,6 +33,7 @@ class _UsersPageState extends State<UsersPage> {
         hobbies {
           id
           title
+          description
           userId
         }
       }

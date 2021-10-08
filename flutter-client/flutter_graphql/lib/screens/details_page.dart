@@ -9,13 +9,9 @@ class DetailsPage extends StatefulWidget {
   _DetailsPageState createState() => _DetailsPageState();
 }
 
-  enum Lists {
-    Hobbies,
-    Posts,
-  }
-
 class _DetailsPageState extends State<DetailsPage> {
-  Lists list = Lists.Hobbies;
+  List _hobbies = [];
+  List _posts = [];
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +86,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 child: TextButton(
                   onPressed: () {
                     setState(() {
-                      list = Lists.Hobbies;
+                      _hobbies = widget.user['hobbies'];
                     });
                   },
                   child: Padding(
@@ -113,7 +109,7 @@ class _DetailsPageState extends State<DetailsPage> {
               TextButton(
                 onPressed: () {
                   setState(() {
-                    list = Lists.Posts;
+                    _posts = widget.user['posts'];
                   });
                 },
                 child: Padding(
@@ -134,6 +130,50 @@ class _DetailsPageState extends State<DetailsPage> {
               )
             ],
           ),
+          Visibility(
+            visible: true,
+            child: Container(
+              height: MediaQuery.of(context).size.height * .45,
+              child: ListView.builder(
+                itemCount: _hobbies.length,
+                itemBuilder: (context, index) {
+                  var data = _hobbies[index];
+
+                  return Stack(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 23, left: 10, right: 10, top: 20),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              offset: Offset(0, 10),
+                              color: Colors.grey.shade300,
+                              blurRadius: 30,
+                            ),
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('${data['title']}')
+                              ],
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  );
+                },
+              ),
+            )
+          )
         ],
       ),
     );
