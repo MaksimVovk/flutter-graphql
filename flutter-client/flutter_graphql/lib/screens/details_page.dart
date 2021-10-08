@@ -55,9 +55,17 @@ class _DetailsPageState extends State<DetailsPage> {
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
-                      )
+                      ),
                     ],
-                  )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8, left: 8),
+                    child: Text('Occupations: ${widget.user['profession'] ?? 'N/A'}')
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Text('Occupations: ${widget.user['age'] ?? 'N/A'}')
+                  ),
                 ],
               ),
             ),
