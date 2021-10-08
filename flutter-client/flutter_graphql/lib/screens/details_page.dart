@@ -12,6 +12,21 @@ class DetailsPage extends StatefulWidget {
 class _DetailsPageState extends State<DetailsPage> {
   List _hobbies = [];
   List _posts = [];
+  bool _isHobby = false;
+  bool _isPost = false;
+
+  void _togglePostBtn () {
+    setState(() {
+      _isPost = true;
+      _isHobby = false;
+    });
+  }
+  void _toggleHobbyBtn () {
+    setState(() {
+      _isPost = false;
+      _isHobby = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +101,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 child: TextButton(
                   onPressed: () {
                     setState(() {
+                      _toggleHobbyBtn();
                       _hobbies = widget.user['hobbies'];
                     });
                   },
@@ -109,6 +125,7 @@ class _DetailsPageState extends State<DetailsPage> {
               TextButton(
                 onPressed: () {
                   setState(() {
+                    _togglePostBtn();
                     _posts = widget.user['posts'];
                   });
                 },
@@ -131,13 +148,13 @@ class _DetailsPageState extends State<DetailsPage> {
             ],
           ),
           Visibility(
-            visible: true,
+            visible: _isHobby || _isPost,
             child: Container(
               height: MediaQuery.of(context).size.height * .45,
               child: ListView.builder(
-                itemCount: _hobbies.length,
+                itemCount: _isHobby ? _hobbies.length : _posts.length,
                 itemBuilder: (context, index) {
-                  var data = _hobbies[index];
+                  var data = _isHobby ? _hobbies[index] : _posts[index];
 
                   return Stack(
                     children: [
@@ -162,7 +179,16 @@ class _DetailsPageState extends State<DetailsPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('${data['title']}')
+                                if (_isHobby)
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('title: ${data['title']}'),
+                                      Text('description: ${data['description']}')
+                                    ]
+                                  )
+                                else
+                                  Text('${data['comment']}')
                               ],
                             )
                           ],
