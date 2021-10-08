@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_graphql/screens/home_screen.dart';
+import 'package:flutter_graphql/styles/styles.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class AddUserPage extends StatefulWidget {
@@ -222,11 +223,7 @@ class _AddUserPageState extends State<AddUserPage> {
                                 ),
                               )
                             ),
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                Colors.greenAccent,
-                              )
-                            ),
+                            style: buildButtonStyle(),
                           ),
                       ],
                     ),
@@ -326,11 +323,7 @@ class _AddUserPageState extends State<AddUserPage> {
                                       ),
                                     )
                                   ),
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                      Colors.greenAccent,
-                                    )
-                                  ),
+                                  style: buildButtonStyle()
                                 ),
                             ],
                           ),
@@ -403,11 +396,7 @@ class _AddUserPageState extends State<AddUserPage> {
                                       ),
                                     )
                                   ),
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                      Colors.greenAccent,
-                                    )
-                                  ),
+                                  style: buildButtonStyle(),
                                 ),
                             ],
                           ),

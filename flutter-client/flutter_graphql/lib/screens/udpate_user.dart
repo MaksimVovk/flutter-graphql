@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_graphql/screens/home_screen.dart';
+import 'package:flutter_graphql/styles/styles.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class UpdateUser extends StatefulWidget {
@@ -196,11 +197,7 @@ class _UpdateUserState extends State<UpdateUser> {
                                 ),
                               )
                             ),
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                Colors.greenAccent,
-                              )
-                            ),
+                            style: buildButtonStyle(),
                           ),
                       ],
                     ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_graphql/styles/styles.dart';
 
 class DetailsPage extends StatefulWidget {
   final dynamic user;
@@ -115,11 +116,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       ),
                     ),
                   ),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                      Colors.greenAccent,
-                    )
-                  ),
+                  style: buildButtonStyle(),
                 ),
               ),
               TextButton(
@@ -139,11 +136,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     ),
                   ),
                 ),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    Colors.greenAccent,
-                  )
-                ),
+                style: buildButtonStyle()
               )
             ],
           ),
