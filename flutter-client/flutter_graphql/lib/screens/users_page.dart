@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_graphql/screens/details_page.dart';
 import 'package:flutter_graphql/screens/home_screen.dart';
 import 'package:flutter_graphql/screens/udpate_user.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -108,6 +109,14 @@ class _UsersPageState extends State<UsersPage> {
                     ),
                     padding: const EdgeInsets.all(20),
                     child: InkWell(
+                      onTap: () async {
+                        final route = MaterialPageRoute(
+                          builder: (context) {
+                            return DetailsPage(user: user);
+                          },
+                        );
+                        await Navigator.push(context, route);
+                      },
                       child: Container(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
